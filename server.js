@@ -15,9 +15,8 @@ app.use("/api/notes", noteRoutes);
 app.use("/api/user", userRoutes);
 
 const corsOptions = {
-  origin: "https://note-app-six-mu.vercel.app/login",
+  origin: "https://noteapp-frontend-production.up.railway.app",
   methods: "GET,PATCH,POST,DELETE",
-  credentials: true,
   optionsSuccessStatus: 204,
 };
 
