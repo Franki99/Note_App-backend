@@ -4,25 +4,26 @@ require("dotenv").config();
 const noteRoutes = require("./routes/notes");
 const userRoutes = require("./routes/user");
 const cors = require("cors");
+
 // express app
 const app = express();
 
-// middleware
-app.use(express.json());
-
-//routes
-app.use("/api/notes", noteRoutes);
-app.use("/api/user", userRoutes);
-
+// CORS options
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://note-app-six-mu.vercel.app/"],
+  origin: ["http://localhost:3000", "https://note-app-six-mu.vercel.app"],
   methods: "GET,PATCH,POST,DELETE",
   optionsSuccessStatus: 204,
 };
 
+// middleware
 app.use(cors(corsOptions));
+app.use(express.json());
 
-//connect to db
+// routes
+app.use("/api/notes", noteRoutes);
+app.use("/api/user", userRoutes);
+
+// connect to db
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
