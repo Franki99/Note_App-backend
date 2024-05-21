@@ -8,18 +8,29 @@ const cors = require("cors");
 // express app
 const app = express();
 
-// CORS options
+// middleware
+app.use(express.json());
+
+// Add the logging and CORS middleware here
+app.use((req, res, next) => {
+  console.log("Request received:", req.method, req.url);
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
+// Define CORS options for specific routes
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://note-app-six-mu.vercel.app"],
+  origin: ["http://localhost:3000", "https://note-app-six-mu.vercel.app/"],
   methods: "GET,PATCH,POST,DELETE",
   optionsSuccessStatus: 204,
 };
 
-app.options("*", cors(corsOptions));
-
-// middleware
+// Apply CORS options middleware
 app.use(cors(corsOptions));
-app.use(express.json());
 
 // routes
 app.use("/api/notes", noteRoutes);
