@@ -1,15 +1,16 @@
-const Note = require("../models/NotesModel");
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import Note from "../models/NotesModel.js";
 
 // Get all notes
-const getNotes = async (req, res) => {
+export const getNotes = async (req, res) => {
   const user_id = req.user._id;
   const notes = await Note.find({ user_id }).sort({ createdAt: -1 });
 
   res.status(200).json(notes);
 };
-// get a single note
-const getNote = async (req, res) => {
+
+// Get a single note
+export const getNote = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -19,14 +20,14 @@ const getNote = async (req, res) => {
   const note = await Note.findById(id);
 
   if (!note) {
-    return res.status(400).json({ eror: "No such note" });
+    return res.status(400).json({ error: "No such note" });
   }
 
   res.status(200).json(note);
 };
 
-//create a new note
-const createNote = async (req, res) => {
+// Create a new note
+export const createNote = async (req, res) => {
   const { title, notes } = req.body;
 
   let emptyFields = [];
@@ -35,15 +36,15 @@ const createNote = async (req, res) => {
     emptyFields.push("title");
   }
   if (!notes) {
-    emptyFields.push("title");
+    emptyFields.push("notes");
   }
   if (emptyFields.length > 0) {
     return res
       .status(400)
-      .json({ eror: "Please fill in all the fields", emptyFields });
+      .json({ error: "Please fill in all the fields", emptyFields });
   }
 
-  //add doc to db
+  // Add doc to db
   try {
     const user_id = req.user._id;
     const note = await Note.create({ title, notes, user_id });
@@ -53,8 +54,8 @@ const createNote = async (req, res) => {
   }
 };
 
-// Delete a workout
-const deleteNote = async (req, res) => {
+// Delete a note
+export const deleteNote = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -64,14 +65,14 @@ const deleteNote = async (req, res) => {
   const note = await Note.findOneAndDelete({ _id: id });
 
   if (!note) {
-    return res.status(400).json({ eror: "No such note" });
+    return res.status(400).json({ error: "No such note" });
   }
 
   res.status(200).json(note);
 };
 
-//Update a workout
-const updateNote = async (req, res) => {
+// Update a note
+export const updateNote = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -86,16 +87,8 @@ const updateNote = async (req, res) => {
   );
 
   if (!note) {
-    return res.status(400).json({ eror: "No such note" });
+    return res.status(400).json({ error: "No such note" });
   }
 
   res.status(200).json(note);
-};
-
-module.exports = {
-  createNote,
-  getNotes,
-  getNote,
-  deleteNote,
-  updateNote,
 };

@@ -1,25 +1,32 @@
- const express = require('express')
- const Note = require('../models/NotesModel')
- const {createNote, getNotes, getNote, deleteNote, updateNote} = require('../controllers/noteController')
- const requireAuth = require('../middleware/requireAuth')
+import express from "express";
+import Note from "../models/NotesModel.js";
+import {
+  createNote,
+  getNotes,
+  getNote,
+  deleteNote,
+  updateNote,
+} from "../controllers/noteController.js";
+import requireAuth from "../middleware/requireAuth.js";
 
- const router = express.Router()
+const router = express.Router();
 
- // Require auth for all the routes
- router.use(requireAuth)
+// Require auth for all the routes
+router.use(requireAuth);
 
- // Get all notes
- router.get('/', getNotes)
+// Get all notes
+router.get("/", getNotes);
 
- // Get a single note
- router.get('/:id', getNote)
+// Get a single note
+router.get("/:id", getNote);
 
- // Post a new note
- router.post('/', createNote)
+// Post a new note
+router.post("/", createNote);
 
- // Delete a note
- router.delete('/:id', deleteNote)
+// Delete a note
+router.delete("/:id", deleteNote);
 
- // Update a note
- router.patch('/:id', updateNote)
- module.exports = router
+// Update a note
+router.patch("/:id", updateNote);
+
+export default router;
